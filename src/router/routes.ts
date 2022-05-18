@@ -5,8 +5,15 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue'), meta: { requiresAuth: true } },
-      { path: 'login', component: () => import('pages/Login.vue') },
+      { path: 'tasks', component: () => import('pages/Task.vue')},
+    ],
+  },
+
+  {
+    path: '/login',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Login.vue'), name: 'login' },
     ],
   },
 
