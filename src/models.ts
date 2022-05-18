@@ -1,4 +1,4 @@
-import { Model, Attr, HasMany, HasOne, SpraypaintBase } from 'spraypaint'
+import { Model, Attr, HasMany, BelongsTo, SpraypaintBase } from 'spraypaint'
 
 @Model()
 export class ApplicationRecord extends SpraypaintBase {
@@ -20,7 +20,7 @@ export class Task extends ApplicationRecord {
   @Attr({ persist: false }) createdAt: string
   @Attr({ persist: false }) updatedAt: string
 
- @HasOne() user: User
+ @BelongsTo() user: User
 }
 
 @Model()
