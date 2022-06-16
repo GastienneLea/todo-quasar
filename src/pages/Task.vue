@@ -81,7 +81,8 @@ export default defineComponent({
     async () => {
       await cable.subscribe(taskChannel)
       taskChannel.on('message', (data) => {
-        tasks.value.push(data)
+        //tasks.value.push(data) a voir les typages
+        console.log('data', data)
       })
     }
 
