@@ -58,6 +58,8 @@ import { Task, User } from 'src/models';
 import { User as UserInterface } from 'src/store/user';
 import { useStore } from 'src/store';
 import { defineComponent, ref, onMounted, computed } from 'vue';
+import { todoChannel } from 'src/utils'
+import { createCable } from '@anycable/web'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -74,15 +76,24 @@ export default defineComponent({
       return user.value as User;
     };
 
-    const addTask = () => {
+    let taskChannel = new todoChannel({ companyId: '2' })
+    let cable = createCable('ws://localhost:3000') // a specifier
+    async () => {
+      await cable.subscribe(taskChannel)
+      taskChannel.on('message', (data) => {
+        tasks.value.push(data)
+      })
+    }
+
+    const addTask = async () => {
       if (newTask.value === '') return;
+      const data = {
+        title: newTask.value,
+        isCompleted: false,
+        dueAt: String(Date.now())
+      }
 
-      let task = new Task({ title: newTask.value });
-      user.value?.tasks.push(task);
-
-      const userObj = castUser();
-
-      void userObj.save({ with: 'tasks' });
+      await taskChannel.createTodo(data)
 
       newTask.value = '';
     };
